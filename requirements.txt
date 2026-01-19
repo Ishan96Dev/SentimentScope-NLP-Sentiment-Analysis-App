@@ -1,0 +1,21 @@
+# Core Framework
+streamlit==1.31.0
+
+# UI Components
+streamlit-option-menu==0.3.12
+streamlit-extras==0.3.6
+
+# NLP & ML
+textblob==0.17.1
+nltk==3.8.1
+
+# Visualization
+plotly==5.18.0
+matplotlib==3.8.2
+
+# Utilities
+python-dotenv==1.0.0
+emoji==2.10.0
+
+# Data Processing
+pandas>=2.0.0
