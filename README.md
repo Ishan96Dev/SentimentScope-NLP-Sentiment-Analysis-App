@@ -339,7 +339,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **GitHub**: [Ishan96Dev](https://github.com/Ishan96Dev)
 - **Email**: [ishanrock1234@gmail.com](mailto:ishanrock1234@gmail.com)
-- **Documentation**: [Link to docs]
+- **Documentation**: [Overview](docs/overview.md)
 
 ---
 
