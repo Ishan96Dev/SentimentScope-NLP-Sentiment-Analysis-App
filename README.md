@@ -11,6 +11,8 @@
 
 A professional, production-ready **Streamlit web application** for real-time sentiment analysis using Natural Language Processing (NLP). Detect sentiment (Positive, Neutral, Negative) with confidence scores and beautiful visualizations.
 
+🌐 **[Try the Live App](https://sentimentscope-nlp-sentiment-analysis-app.streamlit.app/)** 🚀
+
 ---
 
 ## ✨ Features
