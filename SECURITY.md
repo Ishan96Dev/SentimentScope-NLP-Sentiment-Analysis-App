@@ -363,8 +363,8 @@ Before deploying:
 - **GitHub:** [@Ishan96Dev](https://github.com/Ishan96Dev)
 
 ### General Support:
-- **Issues:** [GitHub Issues](https://github.com/Ishan96Dev/SentimentScope/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/Ishan96Dev/SentimentScope/discussions)
+- **Issues:** [GitHub Issues](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/discussions)
 
 ---
 

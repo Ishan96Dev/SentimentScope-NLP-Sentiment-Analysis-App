@@ -59,7 +59,7 @@ A professional, production-ready **Streamlit web application** for real-time sen
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd Streamlit-Sentiment-Analysis-App
+   cd SentimentScope-NLP-Sentiment-Analysis-App
    ```
 
 2. **Create virtual environment (recommended)**
@@ -287,11 +287,11 @@ class SentimentAnalyzer:
 
 Contributions are welcome! To contribute:
 
-1. Fork the repository
+1. Fork the [repository](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App)
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a [Pull Request](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/pulls)
 
 ### Development Setup
 
@@ -340,6 +340,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact & Support
 
 - **GitHub**: [Ishan96Dev](https://github.com/Ishan96Dev)
+- **Repository**: [SentimentScope](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App)
+- **Issues**: [Report bugs or request features](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/issues)
+- **Discussions**: [Ask questions or share ideas](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/discussions)
 - **Email**: [ishanrock1234@gmail.com](mailto:ishanrock1234@gmail.com)
 - **Documentation**: [Overview](docs/overview.md)
 
