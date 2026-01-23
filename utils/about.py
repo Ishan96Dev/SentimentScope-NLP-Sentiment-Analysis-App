@@ -45,34 +45,9 @@ import streamlit as st
 
 def render():
     """
-    Render the About screen with comprehensive application information
+    Render the About screen for SentimentScope using Streamlit.
     
-    PURPOSE:
-        Display detailed information about SentimentScope including features,
-        how it works, technology stack, and usage guidelines.
-    
-    CONTENT STRUCTURE:
-        - Header with title and tagline
-        - Introduction paragraph
-        - What is Sentiment Analysis section (educational)
-        - How SentimentScope Works (technical overview)
-        - Key Features list
-        - Sentiment Types explanation
-        - Technology Stack details
-        - Use Cases examples
-        - Getting Started guide
-        - Security & Privacy information
-        - Footer with attribution
-    
-    UI COMPONENTS USED:
-        - st.markdown() - Text content and formatting
-        - st.columns() - Multi-column layouts
-        - st.info/success/warning() - Colored callout boxes
-        - st.expander() - Collapsible sections
-        - st.code() - Code examples
-    
-    RETURNS:
-        None (renders Streamlit UI components directly)
+    Displays informational sections including an introduction, what sentiment analysis is, how the app works, technical details, example analyses, use cases, key features (current and planned), technology stack, security & privacy notes, limitations, a FAQ, and a feedback/footer area. This function directly renders UI components and does not return a value.
     """
     
     # Header

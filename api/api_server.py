@@ -57,6 +57,18 @@ class AnalyzeRequest(BaseModel):
     
     @validator('text')
     def text_not_empty(cls, v):
+        """
+        Validate that a text value is non-empty and does not exceed 10000 characters.
+        
+        Parameters:
+            v (str): The text value to validate.
+        
+        Returns:
+            str: The validated text.
+        
+        Raises:
+            ValueError: If `v` is empty or only whitespace, or if its length is greater than 10000 characters.
+        """
         if not v or not v.strip():
             raise ValueError('Text cannot be empty')
         if len(v) > 10000:
@@ -72,6 +84,18 @@ class BatchAnalyzeRequest(BaseModel):
     
     @validator('texts')
     def texts_valid(cls, v):
+        """
+        Validate that the batch texts list is non-empty and does not exceed 100 items.
+        
+        Parameters:
+            v (list[str]): Candidate list of texts to validate.
+        
+        Returns:
+            list[str]: The same list `v` if it passes validation.
+        
+        Raises:
+            ValueError: If `v` is empty or contains more than 100 items.
+        """
         if not v or len(v) == 0:
             raise ValueError('Texts list cannot be empty')
         if len(v) > 100:
@@ -105,7 +129,12 @@ class HealthResponse(BaseModel):
 
 # API key validation (simplified - in production use proper auth)
 async def verify_api_key(x_api_key: Optional[str] = Header(None)):
-    """Verify API key from header (optional, for rate limiting)"""
+    """
+    Provide the caller identity from the X-API-Key header for downstream use (e.g., rate limiting).
+    
+    Returns:
+        str: The API key from the header if present, otherwise "anonymous".
+    """
     # In production, implement proper API key validation
     # For now, just check if provided
     if x_api_key:
@@ -117,9 +146,10 @@ async def verify_api_key(x_api_key: Optional[str] = Header(None)):
 @app.get("/api/v1/health", response_model=HealthResponse)
 async def health_check():
     """
-    Health check endpoint
+    Provide the service health status, API version, and current timestamp.
     
-    Returns API status and version information.
+    Returns:
+        HealthResponse: Object with `status` set to `"healthy"`, `version` set to `"1.0.0"`, and `timestamp` as an ISO 8601 string of the current time.
     """
     return HealthResponse(
         status="healthy",
@@ -134,14 +164,16 @@ async def analyze_text(
     api_key: str = Depends(verify_api_key)
 ):
     """
-    Analyze sentiment of a single text
+    Analyze the sentiment of a single text and return a structured analysis.
     
-    Args:
-        request: AnalyzeRequest with text and options
-        api_key: API key from header (optional)
-        
+    Parameters:
+        request (AnalyzeRequest): Input containing `text` to analyze. If `request.include_emotions` is False, the returned `data` will not include an `emotions` field. If `request.include_keywords` is False, the returned `data` will not include an `advanced_keywords` field.
+    
     Returns:
-        AnalyzeResponse with sentiment analysis results
+        AnalyzeResponse: Response object with `success` set to True on success, `data` containing the analysis result (may omit `emotions` and/or `advanced_keywords` as described), `timestamp` of the response, and `processing_time_ms` measuring elapsed processing time in milliseconds.
+    
+    Raises:
+        HTTPException: Raised with status code 500 if analysis fails.
     """
     start_time = time.time()
     
@@ -174,14 +206,13 @@ async def batch_analyze(
     api_key: str = Depends(verify_api_key)
 ):
     """
-    Analyze sentiment of multiple texts in batch
+    Analyze sentiment for a list of texts and return per-text analysis results.
     
-    Args:
-        request: BatchAnalyzeRequest with list of texts
-        api_key: API key from header (optional)
-        
+    Parameters:
+        request (BatchAnalyzeRequest): Contains `texts` (list of input strings) and flags `include_emotions` / `include_keywords` that control whether corresponding fields appear in each result.
+    
     Returns:
-        BatchAnalyzeResponse with analysis results for all texts
+        BatchAnalyzeResponse: Object with `success` (bool), `results` (list of analysis dicts, one per input text; each dict may omit `emotions` or `advanced_keywords` depending on request flags), `total_processed` (int), `timestamp` (ISO 8601 string), and `processing_time_ms` (float, elapsed time in milliseconds).
     """
     start_time = time.time()
     
@@ -216,9 +247,19 @@ async def batch_analyze(
 @app.get("/api/v1/stats")
 async def get_stats(api_key: str = Depends(verify_api_key)):
     """
-    Get API usage statistics
+    Return basic API usage statistics and metadata.
     
-    Returns statistics about API usage (placeholder for future implementation).
+    Returns:
+        JSONResponse: JSON object with the following structure:
+            {
+                "success": True,
+                "data": {
+                    "api_version": str,            # API version string
+                    "endpoints_available": int,    # number of exposed endpoints
+                    "features": [str, ...]        # list of supported features
+                },
+                "timestamp": str                  # ISO-formatted timestamp
+            }
     """
     return JSONResponse({
         "success": True,
@@ -239,6 +280,19 @@ async def get_stats(api_key: str = Depends(verify_api_key)):
 # Error handlers
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
+    """
+    Handle 404 errors by returning a standardized JSON response.
+    
+    Parameters:
+        request: The incoming Starlette/FastAPI request object that triggered the 404.
+        exc: The exception instance representing the 404 error.
+    
+    Returns:
+        JSONResponse: JSON object with keys:
+            - `success` (bool): `False`.
+            - `error` (str): Fixed message "Endpoint not found".
+            - `timestamp` (str): ISO 8601 timestamp of when the response was created.
+    """
     return JSONResponse(
         status_code=404,
         content={
@@ -251,6 +305,19 @@ async def not_found_handler(request, exc):
 
 @app.exception_handler(500)
 async def server_error_handler(request, exc):
+    """
+    Handle unexpected server errors and return a standardized 500 JSON response.
+    
+    Parameters:
+        request (Request): The incoming HTTP request that caused the error.
+        exc (Exception): The exception instance that was raised.
+    
+    Returns:
+        JSONResponse: A response with HTTP status 500 and JSON body containing:
+            - `success` (bool): `False`.
+            - `error` (str): Short error message "Internal server error".
+            - `timestamp` (str): ISO-formatted timestamp of when the error occurred.
+    """
     return JSONResponse(
         status_code=500,
         content={

@@ -88,30 +88,9 @@ from utils.security import InputValidator, RateLimiter, SecurityLogger  # Securi
 
 def render():
     """
-    Render the main sentiment analyzer screen
+    Render the main Streamlit user interface for the Sentiment Analyzer.
     
-    This function creates the complete user interface including:
-    - Header section with title and subtitle
-    - Two-column layout (input + info)
-    - Quick example buttons for testing
-    - Text input area with character counter
-    - Analysis button with security checks
-    - Comprehensive results display
-    - Interactive visualizations
-    - Analysis history panel
-    
-    The function manages session state for:
-    - Example text selection
-    - Analysis history (last 10)
-    - Analysis counter
-    
-    Security Flow:
-    1. Validate input (length, content, format)
-    2. Check rate limit (10/min, 100/hour)
-    3. Sanitize text (remove dangerous content)
-    4. Check for spam (pattern detection)
-    5. Analyze sentiment (if all checks pass)
-    6. Display results or error messages
+    Creates a two-column layout with text input (including quick example buttons), character/word counters, and action controls; performs input validation, rate limiting, sanitization, and spam detection before invoking the sentiment analyzer; updates and persists a bounded analysis history in Streamlit session state; and displays comprehensive results including overall sentiment, confidence, polarity/subjectivity metrics, a polarity gauge, optional emotion and keyword analyses, word-level sentiment highlights, interpretation text, and an export/download option.
     """
     
     # =========================================================================

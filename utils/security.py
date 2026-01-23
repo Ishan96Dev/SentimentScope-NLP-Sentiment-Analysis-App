@@ -79,31 +79,12 @@ class InputValidator:
     @staticmethod
     def sanitize_text(text: str) -> str:
         """
-        Sanitize input text to prevent XSS and injection attacks
+        Remove script and HTML tags, truncate to MAX_TEXT_LENGTH, and strip surrounding whitespace.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n)
-            - SCRIPT_PATTERN.sub(): O(n) - scans entire string
-            - HTML_TAG_PATTERN.sub(): O(n) - pattern matching
-            - String slicing [:MAX_TEXT_LENGTH]: O(1) or O(n) if copy needed
-            - strip(): O(n) - worst case scans string
-            - Total: O(n) where n = length of text
+        If the input is falsy, returns an empty string. The returned string has script tags and other HTML tags removed, is limited to InputValidator.MAX_TEXT_LENGTH characters, and has leading/trailing whitespace trimmed.
         
-        Space Complexity: O(n)
-            - Each regex sub() creates new string: O(n)
-            - Python strings are immutable (new memory allocation)
-            - Temporary strings during operations: O(n)
-        
-        Data Structure: String (immutable character array)
-        Algorithm: Sequential pattern matching with regex (state machine)
-        Security: Multiple layers of sanitization (defense in depth)
-        
-        Args:
-            text: Raw input text
-            
         Returns:
-            Sanitized text string
+            Sanitized text with script and HTML tags removed, truncated to MAX_TEXT_LENGTH, and stripped of leading/trailing whitespace.
         """
         if not text:
             return ""
@@ -122,38 +103,15 @@ class InputValidator:
     @staticmethod
     def validate_input(text: str) -> Tuple[bool, Optional[str]]:
         """
-        Validate input text for security and constraints
+        Validate and enforce security and content constraints on a user-provided text string.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n)
-            - text.strip(): O(n) - scans string
-            - len(text): O(1) - cached length
-            - text.split(): O(n) - splits into words
-            - regex search (SQL pattern): O(n) - pattern matching
-            - regex findall (special chars): O(n) - scans string
-            - Total: O(n) linear time
+        Performs fail-fast checks for empty or whitespace-only input, minimum and maximum character limits, maximum word count, presence of SQL keywords, and excessive special-character ratio.
         
-        Space Complexity: O(m)
-            - text.split(): O(m) - creates list of m words
-            - regex findall: O(k) - list of k matches
-            - Other operations: O(1)
-            - Total: O(m) where m = number of words
+        Parameters:
+            text (str): The input text to validate.
         
-        Data Structures:
-            1. String - input text
-            2. List - word list from split()
-            3. Regex Pattern - compiled state machine
-        
-        Algorithm: Sequential validation with early exit
-        Pattern: Guard clauses (fail-fast validation)
-        Optimization: Checks ordered by likelihood of failure
-        
-        Args:
-            text: Input text to validate
-            
         Returns:
-            Tuple of (is_valid, error_message)
+            tuple: `(True, None)` if the text passes all checks, otherwise `(False, error_message)` where `error_message` explains the first violated constraint.
         """
         if not text or not text.strip():
             return False, "⚠️ Please enter some text to analyze."
@@ -185,30 +143,15 @@ class InputValidator:
     @staticmethod
     def is_spam(text: str) -> bool:
         """
-        Check if text appears to be spam
+        Detects whether the given text matches common spam indicators.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(p * n)
-            - Iterate through p patterns: O(p)
-            - Each re.search(): O(n) - scans entire text
-            - Total: O(p * n) where p = patterns, n = text length
-            - In practice: O(n) since p is small constant (3)
+        Checks for spam keywords (e.g., promotional or scam terms), repeated special-character patterns (e.g., multiple dollar signs or exclamation marks), and an excessive number of URLs. 
         
-        Space Complexity: O(1)
-            - List of patterns: O(1) - fixed size (3 patterns)
-            - Regex match object: O(1) - reference only
-            - No additional storage
+        Parameters:
+            text (str): Input text to evaluate for spam patterns.
         
-        Data Structure: List of compiled regex patterns
-        Algorithm: Sequential pattern matching with early exit
-        Optimization: Returns immediately on first match
-        
-        Args:
-            text: Input text
-            
         Returns:
-            True if spam detected
+            bool: `True` if any spam indicator is found, `False` otherwise.
         """
         spam_indicators = [
             r'(viagra|cialis|lottery|winner|prize|click here|buy now)',
@@ -236,38 +179,12 @@ class RateLimiter:
     @staticmethod
     def check_rate_limit() -> Tuple[bool, Optional[str]]:
         """
-        Check if user has exceeded rate limits
+        Enforces cooldown and rate limits for the current session using session state.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n)
-            - List comprehension (filter old requests): O(n)
-            - Update session_state list: O(1) amortized
-            - Count recent requests (minute): O(n) - filter operation
-            - list.append(): O(1) amortized (dynamic array)
-            - Total: O(n) where n = number of requests in history
-        
-        Space Complexity: O(n)
-            - rate_limit_requests list: O(n) - stores timestamps
-            - Recent requests list: O(m) - temporary filtered list
-            - Maximum n ≤ 100 (hourly limit)
-            - Bounded: O(1) in practice due to limit
-        
-        Data Structures:
-            1. List (Dynamic Array) - stores request timestamps
-            2. Session State (Dictionary) - O(1) access
-        
-        Algorithm: Sliding window rate limiting
-        Pattern: Time-based filtering with list comprehension
-        Optimization: Automatic cleanup of old entries
-        
-        Trade-off Analysis:
-            - Simple implementation vs potential O(n) filter cost
-            - Could use Deque for O(1) append/pop but negligible benefit
-            - List comprehension is Pythonic and readable
+        Performs three checks: a short cooldown since the last request, a per-minute request limit, and a per-hour request limit; on success it records the current request timestamp in session state. 
         
         Returns:
-            Tuple of (is_allowed, error_message)
+            Tuple where the first element is `True` if the request is allowed and `False` otherwise; the second element is an error message string when denied, or `None` when allowed.
         """
         current_time = time.time()
         
@@ -312,27 +229,14 @@ class RateLimiter:
     @staticmethod
     def get_usage_stats() -> dict:
         """
-        Get current usage statistics
-        
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n)
-            - Filter requests (minute): O(n) - list comprehension
-            - Filter requests (hour): O(n) - list comprehension
-            - len() operations: O(1) - list length cached
-            - max() with 2 args: O(1)
-            - Total: O(n) where n = number of stored requests
-        
-        Space Complexity: O(n)
-            - Two filtered lists: O(n) each
-            - Result dictionary: O(1) - fixed 4 keys
-            - Total: O(n)
-        
-        Data Structure: Dictionary (Hash Table) for result
-        Algorithm: Time-based filtering and aggregation
+        Return current rate limit usage statistics for the active session.
         
         Returns:
-            Dictionary with usage stats
+            dict: Mapping with keys:
+                - 'requests_last_minute' (int): number of recorded requests in the last 60 seconds.
+                - 'requests_last_hour' (int): number of recorded requests in the last 3600 seconds.
+                - 'remaining_minute' (int): remaining allowed requests for the minute (0 or positive).
+                - 'remaining_hour' (int): remaining allowed requests for the hour (0 or positive).
         """
         if 'rate_limit_requests' not in st.session_state:
             return {
@@ -370,33 +274,13 @@ class SecurityLogger:
     @staticmethod
     def log_event(event_type: str, details: str):
         """
-        Log security event
+        Append a timestamped security event to the in-memory session log.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(1) amortized
-            - Dictionary creation: O(1)
-            - datetime.now(): O(1)
-            - list.append(): O(1) amortized (dynamic array)
-            - List slicing (if >100): O(k) where k = 100
-            - Overall: O(1) amortized, O(k) worst case
+        Stores a log entry (timestamp, type, details) in Streamlit's session_state under 'security_logs' and retains only the most recent 100 entries.
         
-        Space Complexity: O(k)
-            - security_logs list: O(k) where k ≤ 100
-            - Each log entry dict: O(1) - fixed 3 keys
-            - Bounded space: O(1) in practice (max 100 entries)
-        
-        Data Structures:
-            1. List - circular buffer pattern (manual)
-            2. Dictionary - for each log entry
-        
-        Algorithm: FIFO queue with size limit (manual circular buffer)
-        Pattern: Append + truncate old entries
-        Optimization: Could use collections.deque(maxlen=100) for true O(1)
-        
-        Args:
-            event_type: Type of event (validation_error, rate_limit, etc.)
-            details: Event details
+        Parameters:
+            event_type (str): A short label for the event (e.g., "validation_error", "rate_limit").
+            details (str): Human-readable details about the event.
         """
         if 'security_logs' not in st.session_state:
             st.session_state.security_logs = []
@@ -416,26 +300,15 @@ class SecurityLogger:
     @staticmethod
     def get_recent_logs(count: int = 10) -> list:
         """
-        Get recent security logs
+        Return the most recent security log entries.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(k)
-            - List slicing [-count:]: O(k) where k = count
-            - Creates shallow copy of last k elements
+        If fewer than `count` logs exist, returns all available logs.
         
-        Space Complexity: O(k)
-            - New list with k elements: O(k)
-            - Shallow copy (references only): no deep copy overhead
+        Parameters:
+            count (int): Maximum number of recent logs to retrieve.
         
-        Data Structure: List (Array)
-        Algorithm: Array slicing (negative indexing)
-        
-        Args:
-            count: Number of logs to retrieve
-            
         Returns:
-            List of recent log entries
+            list: Log entries ordered chronologically (oldest to newest) limited to the `count` most recent entries; returns an empty list if no logs exist.
         """
         if 'security_logs' not in st.session_state:
             return []

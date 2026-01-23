@@ -17,11 +17,11 @@ class SentimentScopeClient:
     
     def __init__(self, base_url: str = "http://localhost:8000", api_key: str = None):
         """
-        Initialize API client
+        Create a SentimentScope API client configured with a base URL and optional API key.
         
-        Args:
-            base_url: Base URL of the API server
-            api_key: Optional API key for authentication
+        Parameters:
+            base_url (str): Base URL of the SentimentScope API (including scheme), e.g. "http://localhost:8000".
+            api_key (str | None): Optional API key; when provided it is added to headers as "X-API-Key".
         """
         self.base_url = base_url
         self.headers = {"Content-Type": "application/json"}
@@ -31,16 +31,16 @@ class SentimentScopeClient:
     def analyze(self, text: str, include_emotions: bool = True, 
                 include_keywords: bool = True) -> Dict[str, Any]:
         """
-        Analyze sentiment of a single text
-        
-        Args:
-            text: Text to analyze
-            include_emotions: Include emotion detection results
-            include_keywords: Include advanced keywords
-            
-        Returns:
-            Analysis results dictionary
-        """
+                Analyze the sentiment of a single text string.
+                
+                Parameters:
+                    text (str): The text to analyze.
+                    include_emotions (bool): If True, include detected emotions in the results.
+                    include_keywords (bool): If True, include extracted keywords in the results.
+                
+                Returns:
+                    Dict[str, Any]: Analysis result containing at least a sentiment label and confidence, and optionally detected emotions, extracted keywords, and processing metadata.
+                """
         endpoint = f"{self.base_url}/api/v1/analyze"
         payload = {
             "text": text,
@@ -78,10 +78,10 @@ class SentimentScopeClient:
     
     def health_check(self) -> Dict[str, Any]:
         """
-        Check API health status
+        Retrieve SentimentScope API health information.
         
         Returns:
-            Health status dictionary
+            A dictionary containing health details (for example `status` and `version`).
         """
         endpoint = f"{self.base_url}/api/v1/health"
         response = requests.get(endpoint, headers=self.headers)

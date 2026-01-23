@@ -29,28 +29,15 @@ class SentimentAnalyzer:
     
     def preprocess_text(self, text: str) -> str:
         """
-        Clean and preprocess input text with security measures
+        Clean and sanitize input text for safe sentiment analysis.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n)
-            - html.unescape(): O(n) - scans entire string
-            - re.sub() operations: O(n) each - pattern matching on string
-            - Total: O(n) where n = length of text
+        Performs HTML entity decoding, collapses repeated whitespace, removes potentially unsafe characters while preserving common punctuation, and reduces excessive repeated characters to mitigate spam.
         
-        Space Complexity: O(n)
-            - Each re.sub() creates a new string: O(n)
-            - String operations in Python are immutable (create new strings)
-            - Temporary strings during regex operations: O(n)
+        Parameters:
+            text (str): Raw input text to be cleaned.
         
-        Data Structure Used: String (immutable character array)
-        Algorithm Pattern: Sequential string processing with regex
-        
-        Args:
-            text: Raw input text
-            
         Returns:
-            Cleaned and sanitized text string
+            str: The cleaned and sanitized text.
         """
         # HTML entity decode
         text = html.unescape(text)
@@ -69,42 +56,28 @@ class SentimentAnalyzer:
     
     def analyze(self, text: str) -> Dict[str, any]:
         """
-        Analyze sentiment of input text
+        Analyze input text and return a structured sentiment analysis result.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(n + m)
-            - Input validation: O(1) - constant time checks
-            - len(text): O(1) - Python strings cache their length
-            - text.split(): O(n) - splits string into words
-            - preprocess_text(): O(n) - regex operations
-            - TextBlob analysis: O(m) where m = number of words/tokens
-            - Dictionary construction: O(1) - fixed size dict
-            - Overall: O(n + m) where n = chars, m = words
+        Parameters:
+            text (str): Text to analyze. Must be non-empty, at most 10,000 characters, and contain at most 2,000 words.
         
-        Space Complexity: O(n + m)
-            - cleaned_text: O(n) - copy of processed string
-            - TextBlob object: O(m) - stores tokenized text
-            - Result dictionary: O(1) - fixed size
-            - Total: O(n + m)
-        
-        Data Structures Used:
-            1. String - for text storage (sequential access)
-            2. Dictionary (Hash Table) - for result storage (O(1) access)
-        
-        Algorithm Pattern: NLP Pipeline with validation gates
-        
-        Args:
-            text: Input text to analyze
-            
         Returns:
-            Dictionary containing:
-                - label: Sentiment label (Positive/Neutral/Negative)
-                - confidence: Confidence score (0-100%)
-                - polarity: Raw polarity score (-1 to 1)
-                - subjectivity: Subjectivity score (0 to 1)
-                - emoji: Corresponding emoji
-                - color: Color code for UI
+            result (dict): Mapping with sentiment analysis details:
+                - label (str): "Positive", "Neutral", or "Negative".
+                - confidence (float): Confidence score in range 0–100.
+                - polarity (float): Sentiment polarity rounded to 3 decimals (-1.0 to 1.0).
+                - subjectivity (float): Subjectivity score rounded to 3 decimals (0.0 to 1.0).
+                - emoji (str): Representative emoji for the sentiment.
+                - color (str): Hex color code associated with the sentiment.
+                - text_length (int): Number of characters in the original input.
+                - word_count (int): Number of words in the original input.
+                - word_sentiments (list): List of per-word sentiment dicts (word, polarity, sentiment, impact).
+                - sentiment_keywords (dict): Top positive and negative keyword lists and their totals.
+                - emotions (dict): Detected emotions profile including primary emotion, scores, confidence, and top emotions.
+                - advanced_keywords (dict): Extracted noun phrases, frequent words, and combined keyword metadata.
+        
+        Raises:
+            ValueError: If input is empty after trimming/preprocessing, exceeds allowed character or word limits.
         """
         # Validate input
         if not text or not text.strip():
@@ -160,27 +133,16 @@ class SentimentAnalyzer:
     
     def _classify_sentiment(self, polarity: float) -> Tuple[str, str, str]:
         """
-        Classify sentiment based on polarity score
+        Map a polarity score to a sentiment label, emoji, and color.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(1)
-            - Float comparison: O(1) - constant time
-            - If-elif-else branching: O(1) - maximum 3 comparisons
-            - Return tuple creation: O(1)
+        Parameters:
+            polarity (float): Polarity score (typically -1.0 to 1.0) used to determine sentiment.
         
-        Space Complexity: O(1)
-            - Tuple storage: O(1) - fixed 3 elements
-            - No additional data structures
-        
-        Algorithm: Simple threshold-based classification
-        Optimization: Early exit on first match (if/elif structure)
-        
-        Args:
-            polarity: Polarity score from TextBlob (-1 to 1)
-            
         Returns:
-            Tuple of (label, emoji, color)
+            tuple: (label, emoji, color_hex) where
+                - label (str): "Positive", "Negative", or "Neutral" determined by class thresholds
+                - emoji (str): single-character emoji representing the sentiment
+                - color_hex (str): hex color code associated with the sentiment
         """
         if polarity >= self.POSITIVE_THRESHOLD:
             return "Positive", "😊", "#10b981"  # Green
@@ -191,28 +153,14 @@ class SentimentAnalyzer:
     
     def _calculate_confidence(self, polarity: float, subjectivity: float) -> float:
         """
-        Calculate confidence score based on polarity magnitude and subjectivity
+        Compute a confidence score (0–100) for a sentiment result based on polarity and subjectivity.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(1)
-            - abs(polarity): O(1) - absolute value
-            - Arithmetic operations: O(1) - multiplication, addition
-            - max()/min() with 2 args: O(1) - constant comparisons
-            - round(): O(1)
+        Parameters:
+            polarity (float): Sentiment polarity in the range -1 to 1; larger absolute values indicate stronger sentiment.
+            subjectivity (float): Subjectivity in the range 0 to 1; higher values indicate more subjective (opinionated) text.
         
-        Space Complexity: O(1)
-            - Float variables: O(1) - fixed memory
-            - No additional data structures
-        
-        Algorithm: Mathematical formula evaluation
-        
-        Args:
-            polarity: Polarity score (-1 to 1)
-            subjectivity: Subjectivity score (0 to 1)
-            
         Returns:
-            Confidence percentage (0-100)
+            float: Confidence value between 0 and 100, rounded to two decimals.
         """
         # Base confidence from polarity magnitude
         polarity_confidence = abs(polarity) * 100
@@ -231,27 +179,19 @@ class SentimentAnalyzer:
     
     def _analyze_word_sentiments(self, blob: TextBlob) -> List[Dict]:
         """
-        Analyze sentiment contribution of individual words
+        Analyze per-word sentiment contributions from a TextBlob.
         
-        COMPLEXITY ANALYSIS (DSA):
-        ===========================
-        Time Complexity: O(m)
-            - Iterate through m words: O(m)
-            - TextBlob sentiment per word: O(1) per word (pre-computed)
-            - Total: O(m) where m = number of words
+        Processes each word in the provided TextBlob and returns influential words with their polarity, categorical sentiment, and impact score, sorted by impact descending.
         
-        Space Complexity: O(m)
-            - List of m word dictionaries: O(m)
-            - Each dictionary: O(1) - fixed 4 keys
+        Parameters:
+            blob (TextBlob): TextBlob instance created from the source text to analyze.
         
-        Data Structure: List of Dictionaries
-        Algorithm: Sequential word analysis with sentiment scoring
-        
-        Args:
-            blob: TextBlob object with analyzed text
-            
         Returns:
-            List of dictionaries with word sentiment data
+            List[Dict]: A list of dictionaries (possibly empty). Each dictionary contains:
+                - "word" (str): Lowercased word text.
+                - "polarity" (float): Sentiment polarity rounded to 3 decimals (negative to positive).
+                - "sentiment" (str): One of "Positive", "Negative", or "Neutral".
+                - "impact" (float): Absolute value of the polarity, used to rank influence.
         """
         word_sentiments = []
         
@@ -283,18 +223,13 @@ class SentimentAnalyzer:
     
     def _get_word_sentiment_type(self, polarity: float) -> str:
         """
-        Get sentiment type for a single word
+        Classify a single word polarity as "Positive", "Negative", or "Neutral".
         
-        COMPLEXITY ANALYSIS (DSA):
-        ===========================
-        Time Complexity: O(1)
-        Space Complexity: O(1)
+        Parameters:
+            polarity (float): Polarity score for the word; positive values indicate positive sentiment, negative values indicate negative sentiment, zero indicates neutral.
         
-        Args:
-            polarity: Word polarity score
-            
         Returns:
-            Sentiment type string
+            str: One of "Positive", "Negative", or "Neutral" corresponding to the polarity.
         """
         if polarity > 0:
             return "Positive"
@@ -305,27 +240,19 @@ class SentimentAnalyzer:
     
     def _extract_sentiment_keywords(self, word_sentiments: List[Dict]) -> Dict[str, List[Dict]]:
         """
-        Extract top positive and negative keywords
+        Retrieve the top positive and negative sentiment keywords from word-level sentiment data.
         
-        COMPLEXITY ANALYSIS (DSA):
-        ===========================
-        Time Complexity: O(m)
-            - Filter positive words: O(m)
-            - Filter negative words: O(m)
-            - Slicing top 5: O(1)
-            - Total: O(m) where m = number of sentiment words
+        Filters the provided word sentiment entries by their "sentiment" field and returns up to five positive and five negative entries along with counts.
         
-        Space Complexity: O(k)
-            - Two lists with max 5 elements each: O(k) where k ≤ 10
+        Parameters:
+            word_sentiments (List[Dict]): List of word sentiment dictionaries; each dictionary is expected to contain at least the keys `"word"` and `"sentiment"`.
         
-        Data Structure: Dictionary with Lists
-        Algorithm: Filter and slice
-        
-        Args:
-            word_sentiments: List of word sentiment dictionaries
-            
         Returns:
-            Dictionary with top positive and negative keywords
+            Dict[str, List[Dict]]: Dictionary with the following keys:
+                - "positive": list of up to five word sentiment dicts whose `"sentiment"` is "Positive"
+                - "negative": list of up to five word sentiment dicts whose `"sentiment"` is "Negative"
+                - "total_positive": integer count of positive words found
+                - "total_negative": integer count of negative words found
         """
         # Separate positive and negative words
         positive_words = [w for w in word_sentiments if w["sentiment"] == "Positive"]
@@ -340,29 +267,23 @@ class SentimentAnalyzer:
     
     def _detect_emotions(self, text: str, blob: TextBlob, polarity: float, subjectivity: float) -> Dict[str, Any]:
         """
-        Detect emotions using keyword matching and sentiment analysis
+        Detect the predominant emotion and produce normalized emotion scores based on keyword signals and sentiment metrics.
         
-        COMPLEXITY ANALYSIS (DSA):
-        ===========================
-        Time Complexity: O(n)
-            - Convert to lowercase: O(n)
-            - Keyword matching: O(k * m) where k = keywords, m = text length
-            - Simplified to O(n) as k is constant
+        Analyzes the lowercase text for presence of emotion-related keywords, adjusts raw emotion scores using polarity and subjectivity, normalizes scores to a 0–100 scale, and returns a structured emotion profile.
         
-        Space Complexity: O(1)
-            - Fixed 8 emotions dictionary: O(1)
+        Parameters:
+            text (str): Original input text.
+            blob (TextBlob): TextBlob instance for optional linguistic features (not required by this implementation).
+            polarity (float): Sentiment polarity in the range -1.0 to 1.0; used to boost positive or negative emotion scores.
+            subjectivity (float): Subjectivity in the range 0.0 to 1.0; used to boost emotions when text is more subjective.
         
-        Data Structure: Dictionary for emotion scores
-        Algorithm: Keyword matching + sentiment-based adjustment
-        
-        Args:
-            text: Input text
-            blob: TextBlob object
-            polarity: Sentiment polarity (-1 to 1)
-            subjectivity: Subjectivity score (0 to 1)
-            
         Returns:
-            Dictionary with emotion analysis results
+            dict: Emotion analysis with keys:
+                - "primary_emotion" (str): Capitalized name of the highest-scoring emotion.
+                - "emotion_scores" (Dict[str, float]): Normalized scores for each emotion on a 0–100 scale.
+                - "confidence" (float): Score of the primary emotion (0–100).
+                - "top_emotions" (List[Dict]): Up to three top emotions as {"emotion": name, "score": value}.
+                - "emotion_detected" (bool): True if the primary emotion's confidence is greater than 20, False otherwise.
         """
         text_lower = text.lower()
         
@@ -428,28 +349,18 @@ class SentimentAnalyzer:
     
     def _extract_advanced_keywords(self, blob: TextBlob, word_sentiments: List[Dict]) -> Dict[str, Any]:
         """
-        Extract keywords using frequency analysis and noun phrase extraction
+        Extracts salient keywords from a TextBlob using noun phrase and word frequency analysis.
         
-        COMPLEXITY ANALYSIS (DSA):
-        ===========================
-        Time Complexity: O(n)
-            - Noun phrase extraction: O(n)
-            - Word frequency counting: O(n)
-            - Sorting top words: O(k log k) where k << n
-            - Total: O(n)
+        Parameters:
+            blob (TextBlob): Parsed text object providing noun_phrases and words.
+            word_sentiments (List[Dict]): List of word-level sentiment dictionaries (each must contain a `"word"` key), ordered by impact.
         
-        Space Complexity: O(k)
-            - Storage for unique keywords: O(k)
-        
-        Data Structure: Counter (hash map) for frequency
-        Algorithm: Frequency analysis + noun phrase extraction
-        
-        Args:
-            blob: TextBlob object
-            word_sentiments: List of word sentiment dictionaries
-            
         Returns:
-            Dictionary with extracted keywords
+            Dict[str, Any]: A dictionary with:
+                - "noun_phrases" (List[str]): Up to 5 most frequent noun phrases.
+                - "frequent_words" (List[str]): Up to 10 most frequent words longer than 3 characters.
+                - "sentiment_keywords" (List[str]): Up to 10 top words extracted from `word_sentiments`.
+                - "total_keywords" (int): Count of unique keywords across `frequent_words` and `sentiment_keywords`.
         """
         # Extract noun phrases
         noun_phrases = list(blob.noun_phrases)
@@ -473,32 +384,17 @@ class SentimentAnalyzer:
     
     def batch_analyze(self, texts: list) -> list:
         """
-        Analyze multiple texts at once
+        Analyze a list of texts and return per-text analysis results.
         
-        COMPLEXITY ANALYSIS :
-        ===========================
-        Time Complexity: O(k * (n + m))
-            - Iterate through k texts: O(k)
-            - Each analyze() call: O(n + m) per text
-            - Total: O(k * (n + m)) where k = number of texts
+        Parameters:
+            texts (list): List of input text strings to analyze.
         
-        Space Complexity: O(k * n)
-            - Results list: O(k) - stores k analysis results
-            - Each result dict: O(n) - contains text copies
-            - Total: O(k * n)
-        
-        Data Structures:
-            1. List (Dynamic Array) - for results collection
-            2. Dictionary - for each result
-        
-        Algorithm: Sequential batch processing (no parallelization)
-        Potential Optimization: Parallel processing for large batches
-        
-        Args:
-            texts: List of text strings
-            
         Returns:
-            List of analysis results
+            list: A list where each element is either:
+                - an analysis dictionary produced by analyze(...) with an added
+                  "original_text" key containing the input text, or
+                - an error dictionary with keys "original_text" and "error" when
+                  analysis failed for that input.
         """
         results = []
         for text in texts:
