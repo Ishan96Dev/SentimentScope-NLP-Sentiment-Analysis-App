@@ -30,7 +30,7 @@ from streamlit_option_menu import option_menu  # Custom navigation menu componen
 # ============================================================================
 
 # Import UI screens - each screen is a separate module for better organization
-from ui import home, about  # home: Main sentiment analyzer, about: App information
+from ui import home, about, analytics  # home: Main sentiment analyzer, about: App information, analytics: Insights dashboard
 
 # Import security utilities - handle validation, rate limiting, and logging
 from utils.security import SessionManager, SecurityLogger
@@ -122,20 +122,25 @@ with st.sidebar:
     # Returns the selected option as a string
     selected = option_menu(
         menu_title=None,  # No title above menu (we have branding above)
-        options=["Sentiment Analyzer", "About App"],  # Two main screens
-        icons=["brain", "info-circle"],  # Bootstrap icons for each option
+        options=["Sentiment Analyzer", "Insights Dashboard", "About App"],  # Three main screens
+        icons=["brain", "graph-up-arrow", "info-circle"],  # Bootstrap icons for each option
         menu_icon="cast",  # Icon for the menu itself (not used when menu_title is None)
         default_index=0,  # Start on first option (Sentiment Analyzer)
         styles={  # Custom CSS styling for the menu
             "container": {"padding": "0!important"},  # Remove default padding
-            "icon": {"color": "#ffffff", "font-size": "20px"},  # White icons for visibility
+            "icon": {"color": "#1f2937", "font-size": "20px"},  # Dark gray icons for visibility on light background
             "nav-link": {  # Style for each menu option
                 "font-size": "16px",  # Text size
                 "text-align": "left",  # Left-aligned text
                 "margin": "0px",  # No margin
                 "--hover-color": "#f0f2f6",  # Light gray on hover
+                "color": "#1f2937",  # Dark gray text for non-selected items
             },
-            "nav-link-selected": {"background-color": "#667eea", "color": "#ffffff"},  # Purple background, white text for selected
+            "nav-link-selected": {  # Selected menu option styling
+                "background-color": "#667eea",  # Purple background
+                "color": "#ffffff",  # White text for selected
+                "icon-color": "#ffffff"  # White icons for selected state
+            },
         }
     )
     
@@ -176,6 +181,10 @@ if selected == "Sentiment Analyzer":
     # Display main sentiment analysis interface
     # Defined in ui/home.py
     home.render()
+elif selected == "Insights Dashboard":
+    # Display insights dashboard with analytics and word-level analysis
+    # Defined in ui/analytics.py
+    analytics.render()
 elif selected == "About App":
     # Display application information and documentation
     # Defined in ui/about.py
