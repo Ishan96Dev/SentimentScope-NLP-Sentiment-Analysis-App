@@ -81,6 +81,24 @@ class InputValidator:
         """
         Sanitize input text to prevent XSS and injection attacks
         
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(n)
+            - SCRIPT_PATTERN.sub(): O(n) - scans entire string
+            - HTML_TAG_PATTERN.sub(): O(n) - pattern matching
+            - String slicing [:MAX_TEXT_LENGTH]: O(1) or O(n) if copy needed
+            - strip(): O(n) - worst case scans string
+            - Total: O(n) where n = length of text
+        
+        Space Complexity: O(n)
+            - Each regex sub() creates new string: O(n)
+            - Python strings are immutable (new memory allocation)
+            - Temporary strings during operations: O(n)
+        
+        Data Structure: String (immutable character array)
+        Algorithm: Sequential pattern matching with regex (state machine)
+        Security: Multiple layers of sanitization (defense in depth)
+        
         Args:
             text: Raw input text
             
@@ -105,6 +123,31 @@ class InputValidator:
     def validate_input(text: str) -> Tuple[bool, Optional[str]]:
         """
         Validate input text for security and constraints
+        
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(n)
+            - text.strip(): O(n) - scans string
+            - len(text): O(1) - cached length
+            - text.split(): O(n) - splits into words
+            - regex search (SQL pattern): O(n) - pattern matching
+            - regex findall (special chars): O(n) - scans string
+            - Total: O(n) linear time
+        
+        Space Complexity: O(m)
+            - text.split(): O(m) - creates list of m words
+            - regex findall: O(k) - list of k matches
+            - Other operations: O(1)
+            - Total: O(m) where m = number of words
+        
+        Data Structures:
+            1. String - input text
+            2. List - word list from split()
+            3. Regex Pattern - compiled state machine
+        
+        Algorithm: Sequential validation with early exit
+        Pattern: Guard clauses (fail-fast validation)
+        Optimization: Checks ordered by likelihood of failure
         
         Args:
             text: Input text to validate
@@ -144,6 +187,23 @@ class InputValidator:
         """
         Check if text appears to be spam
         
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(p * n)
+            - Iterate through p patterns: O(p)
+            - Each re.search(): O(n) - scans entire text
+            - Total: O(p * n) where p = patterns, n = text length
+            - In practice: O(n) since p is small constant (3)
+        
+        Space Complexity: O(1)
+            - List of patterns: O(1) - fixed size (3 patterns)
+            - Regex match object: O(1) - reference only
+            - No additional storage
+        
+        Data Structure: List of compiled regex patterns
+        Algorithm: Sequential pattern matching with early exit
+        Optimization: Returns immediately on first match
+        
         Args:
             text: Input text
             
@@ -177,6 +237,34 @@ class RateLimiter:
     def check_rate_limit() -> Tuple[bool, Optional[str]]:
         """
         Check if user has exceeded rate limits
+        
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(n)
+            - List comprehension (filter old requests): O(n)
+            - Update session_state list: O(1) amortized
+            - Count recent requests (minute): O(n) - filter operation
+            - list.append(): O(1) amortized (dynamic array)
+            - Total: O(n) where n = number of requests in history
+        
+        Space Complexity: O(n)
+            - rate_limit_requests list: O(n) - stores timestamps
+            - Recent requests list: O(m) - temporary filtered list
+            - Maximum n ≤ 100 (hourly limit)
+            - Bounded: O(1) in practice due to limit
+        
+        Data Structures:
+            1. List (Dynamic Array) - stores request timestamps
+            2. Session State (Dictionary) - O(1) access
+        
+        Algorithm: Sliding window rate limiting
+        Pattern: Time-based filtering with list comprehension
+        Optimization: Automatic cleanup of old entries
+        
+        Trade-off Analysis:
+            - Simple implementation vs potential O(n) filter cost
+            - Could use Deque for O(1) append/pop but negligible benefit
+            - List comprehension is Pythonic and readable
         
         Returns:
             Tuple of (is_allowed, error_message)
@@ -226,6 +314,23 @@ class RateLimiter:
         """
         Get current usage statistics
         
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(n)
+            - Filter requests (minute): O(n) - list comprehension
+            - Filter requests (hour): O(n) - list comprehension
+            - len() operations: O(1) - list length cached
+            - max() with 2 args: O(1)
+            - Total: O(n) where n = number of stored requests
+        
+        Space Complexity: O(n)
+            - Two filtered lists: O(n) each
+            - Result dictionary: O(1) - fixed 4 keys
+            - Total: O(n)
+        
+        Data Structure: Dictionary (Hash Table) for result
+        Algorithm: Time-based filtering and aggregation
+        
         Returns:
             Dictionary with usage stats
         """
@@ -267,6 +372,28 @@ class SecurityLogger:
         """
         Log security event
         
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(1) amortized
+            - Dictionary creation: O(1)
+            - datetime.now(): O(1)
+            - list.append(): O(1) amortized (dynamic array)
+            - List slicing (if >100): O(k) where k = 100
+            - Overall: O(1) amortized, O(k) worst case
+        
+        Space Complexity: O(k)
+            - security_logs list: O(k) where k ≤ 100
+            - Each log entry dict: O(1) - fixed 3 keys
+            - Bounded space: O(1) in practice (max 100 entries)
+        
+        Data Structures:
+            1. List - circular buffer pattern (manual)
+            2. Dictionary - for each log entry
+        
+        Algorithm: FIFO queue with size limit (manual circular buffer)
+        Pattern: Append + truncate old entries
+        Optimization: Could use collections.deque(maxlen=100) for true O(1)
+        
         Args:
             event_type: Type of event (validation_error, rate_limit, etc.)
             details: Event details
@@ -290,6 +417,19 @@ class SecurityLogger:
     def get_recent_logs(count: int = 10) -> list:
         """
         Get recent security logs
+        
+        COMPLEXITY ANALYSIS :
+        ===========================
+        Time Complexity: O(k)
+            - List slicing [-count:]: O(k) where k = count
+            - Creates shallow copy of last k elements
+        
+        Space Complexity: O(k)
+            - New list with k elements: O(k)
+            - Shallow copy (references only): no deep copy overhead
+        
+        Data Structure: List (Array)
+        Algorithm: Array slicing (negative indexing)
         
         Args:
             count: Number of logs to retrieve

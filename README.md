@@ -1,5 +1,6 @@
 # 🧠 SentimentScope - NLP Sentiment Analysis App
 
+**Version:** 2.0 🎉 **NEW FEATURES!**  
 **Author:** Ishan Chakraborty  
 **License:** MIT  
 **Copyright:** © 2026
@@ -9,9 +10,21 @@
 ![NLP](https://img.shields.io/badge/NLP-TextBlob-green?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-A professional, production-ready **Streamlit web application** for real-time sentiment analysis using Natural Language Processing (NLP). Detect sentiment (Positive, Neutral, Negative) with confidence scores and beautiful visualizations.
+A professional, production-ready **Streamlit web application** for real-time sentiment analysis using Natural Language Processing (NLP). Detect sentiment, emotions, keywords with confidence scores and beautiful visualizations.
 
-🌐 **[Try the Live App](https://sentimentscope-nlp-sentiment-analysis-app.streamlit.app/)** 🚀
+---
+
+## 🎉 What's New in Version 2.0
+
+### 5 Major New Features:
+
+1. **🎭 Emotion Detection** - Detects 8 emotions (Joy, Sadness, Anger, Fear, Surprise, Disgust, Trust, Anticipation)
+2. **🔑 Advanced Keyword Extraction** - Multi-word phrases + frequency analysis
+3. **📈 Sentiment Trends Over Time** - Track sentiment changes with interactive charts
+4. **🎨 Enhanced Analytics Dashboard** - New visualizations, emotion aggregation, statistics
+5. **🔗 REST API Integration** - FastAPI server with 4 endpoints for programmatic access
+
+**Plus**: Bug fixes and performance improvements!
 
 ---
 
@@ -19,9 +32,29 @@ A professional, production-ready **Streamlit web application** for real-time sen
 
 ### 🎯 Core Functionality
 - **Real-time Sentiment Analysis** - Instant sentiment detection as you type
-- **Confidence Scoring** - See how confident the model is about its prediction
+- **🎭 Emotion Detection** - ✨ NEW! Identify 8 primary emotions with confidence scores
+- **🔑 Advanced Keywords** - ✨ NEW! Extract key phrases and frequent words
+- **Confidence Scoring** - See how confident the model is about predictions
 - **Visual Polarity Gauge** - Interactive gauge chart showing sentiment strength
+- **Word-Level Analysis** - See which words drive the sentiment
 - **Multiple Sentiment Types** - Positive 😊, Neutral 😐, Negative 😠
+
+### 📊 Analytics & Insights
+- **📈 Sentiment Trends** - ✨ NEW! Visualize sentiment changes over time
+- **🎭 Emotion Aggregation** - ✨ NEW! Pie charts and statistics for emotions
+- **Detailed Metrics** - Polarity, subjectivity, confidence scores
+- **Word Impact Visualization** - Bar charts of most influential words
+- **Keyword Frequency Tables** - Top positive/negative keywords
+- **Visual Representations** - Interactive Plotly charts
+- **Session Statistics** - Track total analyses performed
+- **Export Reports** - Download comprehensive analysis reports
+
+### 🔗 API Integration
+- **REST API** - ✨ NEW! FastAPI server for programmatic access
+- **4 Endpoints** - Health check, single analysis, batch processing, statistics
+- **Auto Documentation** - Swagger UI and ReDoc
+- **Python Client** - Easy-to-use client library included
+- **CORS Support** - Cross-origin requests enabled
 
 ### 🛡️ Security Features
 - **Input Validation** - Comprehensive validation and sanitization
@@ -39,12 +72,7 @@ A professional, production-ready **Streamlit web application** for real-time sen
 - **Export Results** - Download analysis reports as text files
 - **Real-time Stats** - Character and word counters
 - **Responsive Design** - Works seamlessly on desktop and mobile
-
-### 📊 Analytics
-- **Detailed Metrics** - Polarity, subjectivity, confidence scores
-- **Visual Representations** - Interactive charts and progress bars
-- **Interpretation Guide** - Understand what the results mean
-- **Session Statistics** - Track total analyses performed
+- **Interactive Tooltips** - Hover information throughout
 
 ---
 
@@ -59,7 +87,7 @@ A professional, production-ready **Streamlit web application** for real-time sen
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd SentimentScope-NLP-Sentiment-Analysis-App
+   cd Streamlit-Sentiment-Analysis-App
    ```
 
 2. **Create virtual environment (recommended)**
@@ -287,11 +315,11 @@ class SentimentAnalyzer:
 
 Contributions are welcome! To contribute:
 
-1. Fork the [repository](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App)
+1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a [Pull Request](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/pulls)
+5. Open a Pull Request
 
 ### Development Setup
 
@@ -340,11 +368,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact & Support
 
 - **GitHub**: [Ishan96Dev](https://github.com/Ishan96Dev)
-- **Repository**: [SentimentScope](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App)
-- **Issues**: [Report bugs or request features](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/issues)
-- **Discussions**: [Ask questions or share ideas](https://github.com/Ishan96Dev/SentimentScope-NLP-Sentiment-Analysis-App/discussions)
 - **Email**: [ishanrock1234@gmail.com](mailto:ishanrock1234@gmail.com)
-- **Documentation**: [Overview](docs/overview.md)
+- **Documentation**: [Link to docs]
 
 ---
 

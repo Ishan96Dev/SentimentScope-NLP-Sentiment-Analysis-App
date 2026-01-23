@@ -19,3 +19,9 @@ emoji==2.10.0
 
 # Data Processing
 pandas>=2.0.0
+
+# API Framework (Optional - for API server)
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.0
+requests==2.31.0
