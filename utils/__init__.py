@@ -1,44 +1,32 @@
 """
-User Interface Module
-=====================
-Streamlit-based UI components for SentimentScope
+Utilities Module
+================
+Security and helper utilities for SentimentScope
 
 PURPOSE:
-    This package contains all user interface screens and components
-    for the SentimentScope application. Each module represents a
-    complete screen/page in the application.
+    This package contains utility functions and security components
+    used throughout the SentimentScope application.
 
-SCREENS:
-    1. home.py - Main sentiment analyzer interface
-       - Text input and analysis
-       - Results display with word-level insights
-       - Analysis history
-       
-    2. analytics.py - Insights dashboard
-       - Aggregate statistics
-       - Word impact visualizations
-       - Keyword frequency analysis
-       
-    3. about.py - Application information
-       - What is sentiment analysis
-       - How to use the app
-       - Technology stack details
+MODULES:
+    1. security.py - Security utilities
+       - Input validation
+       - Rate limiting
+       - Session management
+       - Security logging
 
-NAVIGATION:
-    Screens are routed through app.py using streamlit-option-menu
-    Each screen has a render() function called by the router
-
-DESIGN PRINCIPLES:
-    ✅ Responsive layouts with columns
-    ✅ Consistent color scheme
-    ✅ Interactive visualizations
-    ✅ Clear information hierarchy
-    ✅ Mobile-friendly design
+USAGE:
+    from utils.security import InputValidator, RateLimiter
+    
+    validator = InputValidator()
+    if validator.validate_text(user_input):
+        # Process input
+        pass
 
 Author: Ishan Chakraborty
 License: MIT
 """
 
-from ui import home, about, analytics
+# Import security utilities for easier access
+from utils.security import InputValidator, RateLimiter, SessionManager, SecurityLogger
 
-__all__ = ['home', 'about', 'analytics']
+__all__ = ['InputValidator', 'RateLimiter', 'SessionManager', 'SecurityLogger']
