@@ -123,7 +123,7 @@ with st.sidebar:
     selected = option_menu(
         menu_title=None,  # No title above menu (we have branding above)
         options=["Sentiment Analyzer", "Insights Dashboard", "About App"],  # Three main screens
-        icons=["brain", "graph-up-arrow", "info-circle"],  # Bootstrap icons for each option
+        icons=["heart-pulse", "graph-up-arrow", "info-circle"],  # Bootstrap icons for each option
         menu_icon="cast",  # Icon for the menu itself (not used when menu_title is None)
         default_index=0,  # Start on first option (Sentiment Analyzer)
         styles={  # Custom CSS styling for the menu
