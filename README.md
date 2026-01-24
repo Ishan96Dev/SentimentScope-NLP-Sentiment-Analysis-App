@@ -1,6 +1,6 @@
 # 🧠 SentimentScope - NLP Sentiment Analysis App
 
-**Version:** 2.0 🎉 **NEW FEATURES!**  
+**Version:** 2.1 ✨ **Latest Release!**  
 **Author:** Ishan Chakraborty  
 **License:** MIT  
 **Copyright:** © 2026
@@ -16,17 +16,29 @@ A professional, production-ready **Streamlit web application** for real-time sen
 
 ---
 
-## 🎉 What's New in Version 2.0
+## 🎉 What's New in Version 2.1
 
-### 5 Major New Features:
+### 🐛 Critical Bug Fixes:
 
-1. **🎭 Emotion Detection** - Detects 8 emotions (Joy, Sadness, Anger, Fear, Surprise, Disgust, Trust, Anticipation)
-2. **🔑 Advanced Keyword Extraction** - Multi-word phrases + frequency analysis
-3. **📈 Sentiment Trends Over Time** - Track sentiment changes with interactive charts
-4. **🎨 Enhanced Analytics Dashboard** - New visualizations, emotion aggregation, statistics
-5. **🔗 REST API Integration** - FastAPI server with 4 endpoints for programmatic access
+1. **✅ Python 3.13 Compatibility** - Fixed deployment failures on Streamlit Cloud (pydantic 2.10.6)
+2. **✅ Circular Import Resolution** - Fixed module initialization errors
+3. **✅ NLTK Auto-Download** - Automatic corpus download, no manual setup required
+4. **✅ Complete Analytics Module** - Fixed missing ui/analytics.py module
 
-**Plus**: Bug fixes and performance improvements!
+### ✨ Visual Enhancements:
+
+1. **🎨 Styled Emotion Cards** - Beautiful gradient backgrounds with 48px emojis
+2. **🟢 Word-Level Sentiment** - Color-coded cards (green/red gradients) with impact scores
+3. **💓 New Icon** - Heart-pulse icon for Sentiment Analyzer tab
+4. **📋 Enhanced Keywords** - Two-column layout for better readability
+5. **🎉 Emoji Examples** - Quick examples now include expressive emojis
+
+### 📦 Version 2.0 Features (Previous Release):
+- 🎭 Emotion Detection (8 emotions)
+- 🔑 Advanced Keyword Extraction
+- 📈 Sentiment Trends Over Time
+- 📊 Comprehensive Analytics Dashboard
+- 🔗 REST API Integration (FastAPI)
 
 ---
 
@@ -108,17 +120,13 @@ A professional, production-ready **Streamlit web application** for real-time sen
    pip install -r requirements.txt
    ```
 
-4. **Download NLTK data (first time only)**
-   ```python
-   python -c "import nltk; nltk.download('brown'); nltk.download('punkt')"
-   ```
-
-5. **Run the app**
+4. **Run the app**
+   > ✨ **v2.1 Update:** NLTK data downloads automatically - no manual setup required!
    ```bash
    streamlit run app.py
    ```
 
-6. **Open in browser**
+5. **Open in browser**
    - The app will automatically open at `http://localhost:8501`
 
 ---
