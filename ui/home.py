@@ -113,15 +113,15 @@ def render():
         
         with example_cols[0]:
             if st.button("😊 Positive Example"):
-                st.session_state.example_text = "I absolutely loved this experience! It was amazing and exceeded all my expectations."
+                st.session_state.example_text = "I absolutely loved this experience! 🎉 It was amazing and exceeded all my expectations. The team was fantastic! 👏✨"
         
         with example_cols[1]:
             if st.button("😐 Neutral Example"):
-                st.session_state.example_text = "The product arrived on time. It works as described."
+                st.session_state.example_text = "The product arrived on time 📦. It works as described. Standard service, nothing exceptional."
         
         with example_cols[2]:
             if st.button("😠 Negative Example"):
-                st.session_state.example_text = "This is the worst service I've ever experienced. Completely disappointed and frustrated."
+                st.session_state.example_text = "This is the worst service I've ever experienced 😤. Completely disappointed and frustrated. Never again! 👎"
         
         # Text area
         default_text = st.session_state.get("example_text", "")

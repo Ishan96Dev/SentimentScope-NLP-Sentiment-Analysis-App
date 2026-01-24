@@ -206,28 +206,35 @@ def render():
     
     with feature_cols[0]:
         st.markdown("""
-        ### Current Features:
+        ### ✅ Current Features (v2.0):
         - ✅ Real-time sentiment analysis
-        - ✅ Confidence scoring
-        - ✅ Visual polarity gauge
+        - ✅ Confidence scoring & polarity gauge
+        - ✅ Word-level sentiment breakdown
         - ✅ Analysis history tracking
-        - ✅ Export results to file
-        - ✅ Quick example templates
+        - ✅ 📊 Advanced analytics dashboard
+        - ✅ 🎭 Emotion detection (Basic)
+        - ✅ 🔑 Keyword extraction
+        - ✅ 📈 Sentiment trends over time
+        - ✅ Quick example templates with emojis
         - ✅ Character & word counter
-        - ✅ Detailed metrics display
+        - ✅ Export history to CSV
+        - ✅ 🔗 REST API integration (FastAPI)
+        - ✅ Security features (rate limiting, validation)
         """)
     
     with feature_cols[1]:
         st.markdown("""
-        ### 🔮 Coming Soon:
+        ### 🔮 Coming Soon (v3.0):
         - 🔄 Batch CSV file analysis
         - 🌍 Multi-language support
-        - 🎭 Emotion detection
-        - 🔑 Keyword extraction
-        - 📊 Advanced analytics dashboard
-        - 🔗 API integration
-        - 📈 Sentiment trends over time
+        - 🎭 Advanced emotion detection (Joy, Fear, etc.)
+        - 🤖 AI-powered insights & recommendations
+        - 📊 Interactive data visualizations
+        - 🌐 Social media integration
         - 👥 Team collaboration features
+        - 📱 Mobile app version
+        - 🔔 Real-time alerts & notifications
+        - 🎨 Custom theming options
         """)
     
     st.markdown("---")

@@ -11,6 +11,35 @@ from typing import Dict, Tuple, List, Any
 import re
 import html
 from collections import Counter
+import nltk
+import sys
+
+# Download required NLTK data for TextBlob
+def download_nltk_data():
+    """Download required NLTK datasets for TextBlob to work properly"""
+    required_corpora = [
+        'brown',  # Required for TextBlob
+        'punkt',  # Sentence tokenization
+        'punkt_tab',  # Punkt tokenizer models
+        'wordnet',  # WordNet lexical database
+        'averaged_perceptron_tagger',  # POS tagging
+    ]
+    
+    for corpus in required_corpora:
+        try:
+            nltk.data.find(f'corpora/{corpus}' if corpus in ['brown', 'wordnet'] else f'tokenizers/{corpus}')
+        except LookupError:
+            try:
+                print(f"Downloading NLTK data: {corpus}...")
+                nltk.download(corpus, quiet=True)
+            except Exception as e:
+                print(f"Warning: Could not download {corpus}: {e}", file=sys.stderr)
+
+# Initialize NLTK data on module import
+try:
+    download_nltk_data()
+except Exception as e:
+    print(f"Warning: NLTK initialization failed: {e}", file=sys.stderr)
 
 
 class SentimentAnalyzer:
