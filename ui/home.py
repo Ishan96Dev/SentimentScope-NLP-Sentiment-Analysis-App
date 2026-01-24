@@ -223,17 +223,6 @@ def render():
                                 st.markdown("---")
                                 st.markdown("## 📊 Analysis Results")
                                 
-                                # Feature highlights banner
-                                st.info("""
-                                ✨ **What You're Seeing:**
-                                - 🔄 **Real-time sentiment analysis** - Instant results powered by AI
-                                - 🎭 **Emotion Detection** - ✨ NEW! Identify 8 primary emotions with confidence scores
-                                - 🔑 **Advanced Keywords** - ✨ NEW! Extract key phrases and frequent words
-                                - 📊 **Confidence Scoring** - See how confident the model is about predictions
-                                - 📝 **Word-Level Analysis** - See which words drive the sentiment
-                                - 😊 **Multiple Sentiment Types** - Positive 😊, Neutral 😐, Negative 😠
-                                """)
-                                
                                 # Main result card
                                 result_col1, result_col2, result_col3 = st.columns([1, 2, 1])
                                 
