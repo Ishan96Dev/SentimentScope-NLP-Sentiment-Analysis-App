@@ -5,10 +5,10 @@
 **License:** MIT  
 **Copyright:** © 2026
 
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![NLP](https://img.shields.io/badge/NLP-TextBlob-green?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![NLP](https://img.shields.io/badge/NLP-TextBlob-green?style=for-the-badge)](https://textblob.readthedocs.io/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 A professional, production-ready **Streamlit web application** for real-time sentiment analysis using Natural Language Processing (NLP). Detect sentiment, emotions, keywords with confidence scores and beautiful visualizations.
 
