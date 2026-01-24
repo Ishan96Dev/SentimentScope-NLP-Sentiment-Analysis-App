@@ -7,6 +7,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1] - 2026-01-24
+
+### 🐛 Bug Fixes
+
+#### Deployment & Compatibility
+- **Fixed Python 3.13 Compatibility Issue**
+  - Updated `pydantic` from 2.5.0 → 2.10.6 to fix ForwardRef._evaluate() TypeError
+  - Updated `fastapi` from 0.109.0 → 0.109.2 for compatibility
+  - Updated `uvicorn[standard]` from 0.27.0 → 0.27.1
+  - Resolved Streamlit Cloud deployment failure caused by pydantic-core build error
+  
+- **Fixed Circular Import Error**
+  - Corrected `utils/__init__.py` to import security utilities instead of UI modules
+  - Eliminated circular dependency chain: app.py → ui.home → utils.security → ui
+  - Properly exports: InputValidator, RateLimiter, SessionManager, SecurityLogger
+
+- **Fixed Missing Module Error**
+  - Created missing `ui/analytics.py` module (340+ lines)
+  - Implemented complete Analytics Dashboard with 8 comprehensive sections
+  - Resolved ImportError that prevented app startup
+
+#### NLP & Data Issues
+- **Fixed NLTK Missing Corpora Error**
+  - Added automatic NLTK data download in `sentiment/analyzer.py`
+  - Downloads required corpora: brown, punkt, punkt_tab, wordnet, averaged_perceptron_tagger
+  - Graceful error handling for missing data on fresh deployments
+  - Eliminates "missing required data" errors
+
+### ✨ Enhancements
+
+#### User Interface Improvements
+- **Enhanced Quick Examples with Emojis**
+  - Added emoji-rich example texts: 🎉 "It was amazing", 📦 "arrived on time", 😤 "disappointed"
+  - Improved user onboarding and feature discoverability
+
+- **Styled Emotion Detection Display**
+  - Added gradient background cards for emotions (purple gradient: #667eea → #764ba2)
+  - Large 48px emoji icons for visual impact
+  - Primary emotion display with confidence percentage
+  - Emotion breakdown with color-coded progress bars for top 3 emotions
+
+- **Improved Word-Level Sentiment Visualization**
+  - Styled HTML cards with gradient backgrounds
+    - Positive words: Green gradient (#d1fae5 → #a7f3d0)
+    - Negative words: Red gradient (#fee2e2 → #fecaca)
+  - Displays polarity score and impact score for each word
+  - Expandable "View All Word Sentiments" section showing top 20 words
+
+- **Enhanced Advanced Keywords Display**
+  - Two-column layout: Noun Phrases | Frequent Words
+  - Better visual organization of extracted keywords
+  - Improved readability and scanning
+
+- **Updated Sentiment Analyzer Icon**
+  - Changed from "brain" to "heart-pulse" icon for better thematic fit
+  - Enhanced sidebar navigation visual appeal
+
+### 🔄 Updated
+
+- **Refreshed About Page - Key Features Section**
+  - Updated "Current Features (v2.0)" to reflect implemented capabilities
+  - Added: Analytics dashboard, Emotion detection, Keyword extraction, Trends over time, API integration
+  - Aligned feature list with actual v2.0 functionality
+
+### 🗑️ Removed
+
+- **Removed Feature Highlights Banner**
+  - Cleaned up redundant info banner from Analysis Results section
+  - Streamlined user interface for better focus on results
+
+---
+
 ## [2.0] - 2026-01-24
 
 ### ✨ Added
