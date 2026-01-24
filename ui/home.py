@@ -223,6 +223,17 @@ def render():
                                 st.markdown("---")
                                 st.markdown("## 📊 Analysis Results")
                                 
+                                # Feature highlights banner
+                                st.info("""
+                                ✨ **What You're Seeing:**
+                                - 🔄 **Real-time sentiment analysis** - Instant results powered by AI
+                                - 🎭 **Emotion Detection** - ✨ NEW! Identify 8 primary emotions with confidence scores
+                                - 🔑 **Advanced Keywords** - ✨ NEW! Extract key phrases and frequent words
+                                - 📊 **Confidence Scoring** - See how confident the model is about predictions
+                                - 📝 **Word-Level Analysis** - See which words drive the sentiment
+                                - 😊 **Multiple Sentiment Types** - Positive 😊, Neutral 😐, Negative 😠
+                                """)
+                                
                                 # Main result card
                                 result_col1, result_col2, result_col3 = st.columns([1, 2, 1])
                                 
@@ -313,7 +324,76 @@ def render():
                                     The tone is balanced, factual, or objective.
                                     """)
                                 
+                                # Emotion Detection - NEW v2.0 Feature
+                                if 'emotions' in result and result['emotions']:
+                                    st.markdown("---")
+                                    st.markdown("#### 🎭 Emotion Detection - ✨ NEW!")
+                                    st.caption("Identify primary emotions with confidence scores")
+                                    
+                                    emotions = result['emotions']
+                                    emotion_cols = st.columns(4)
+                                    
+                                    for idx, (emotion, score) in enumerate(list(emotions.items())[:4]):
+                                        with emotion_cols[idx]:
+                                            emoji_map = {
+                                                'joy': '😊', 'sadness': '😢', 'anger': '😠', 'fear': '😨',
+                                                'surprise': '😲', 'disgust': '🤢', 'trust': '🤝', 'anticipation': '🤔'
+                                            }
+                                            st.metric(
+                                                label=f"{emoji_map.get(emotion, '💭')} {emotion.title()}",
+                                                value=f"{score}%"
+                                            )
+                                    
+                                    # Show all emotions in expander
+                                    with st.expander("View All Emotions"):
+                                        for emotion, score in emotions.items():
+                                            st.progress(score / 100, text=f"{emotion.title()}: {score}%")
+                                
+                                # Advanced Keywords - NEW v2.0 Feature
+                                if 'advanced_keywords' in result and result['advanced_keywords']:
+                                    st.markdown("---")
+                                    st.markdown("#### 🔑 Advanced Keywords - ✨ NEW!")
+                                    st.caption("Key phrases and frequent words extracted from your text")
+                                    
+                                    keywords = result['advanced_keywords']
+                                    
+                                    keyword_col1, keyword_col2 = st.columns(2)
+                                    
+                                    with keyword_col1:
+                                        st.markdown("**🎯 Key Phrases:**")
+                                        if 'key_phrases' in keywords and keywords['key_phrases']:
+                                            for phrase, score in keywords['key_phrases'][:5]:
+                                                st.markdown(f"- `{phrase}` (score: {score:.2f})")
+                                        else:
+                                            st.caption("No key phrases detected")
+                                    
+                                    with keyword_col2:
+                                        st.markdown("**🔤 Top Words:**")
+                                        if 'frequent_words' in keywords and keywords['frequent_words']:
+                                            for word, count in keywords['frequent_words'][:5]:
+                                                st.markdown(f"- `{word}` ({count}x)")
+                                        else:
+                                            st.caption("No frequent words detected")
+                                
+                                # Word-Level Analysis
+                                if 'word_sentiments' in result and result['word_sentiments']:
+                                    st.markdown("---")
+                                    st.markdown("#### 📝 Word-Level Analysis")
+                                    st.caption("See which words drive the sentiment (showing top 10)")
+                                    
+                                    word_sentiments = result['word_sentiments'][:10]
+                                    
+                                    for word_data in word_sentiments:
+                                        sentiment_color = {
+                                            'positive': '🟢',
+                                            'negative': '🔴',
+                                            'neutral': '⚪'
+                                        }.get(word_data.get('sentiment', 'neutral'), '⚪')
+                                        
+                                        st.markdown(f"{sentiment_color} **{word_data['word']}** - Polarity: {word_data['polarity']:.2f}")
+                                
                                 # Export option
+                                st.markdown("---")
                                 st.markdown("#### 💾 Export Results")
                                 export_data = f"""
 Sentiment Analysis Report
